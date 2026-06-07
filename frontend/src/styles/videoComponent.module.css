@@ -108,28 +108,61 @@
 }
 
 .meetVideoContainer {
+    --meeting-content-width: 1120px;
+    --meeting-compact-width: 680px;
+    --meeting-section-gap: var(--nm-space-3);
     position: relative;
     display: grid;
     min-height: 100vh;
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr);
+    place-items: stretch center;
     overflow: hidden;
     background:
-        radial-gradient(circle at 78% 12%, rgba(165, 180, 252, 0.22), transparent 24%),
+        radial-gradient(circle at 78% 12%, rgba(165, 180, 252, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 36%),
         var(--nm-meeting-bg);
     padding: var(--nm-space-4);
 }
 
-.meetingTopBar {
+.meetingContent {
     z-index: 2;
+    box-sizing: border-box;
+    display: grid;
+    width: min(100%, 1120px);
+    margin: 0 auto;
+    min-height: 0;
+    height: calc(100vh - 32px);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: var(--meeting-section-gap);
+    margin-inline: auto;
+}
+
+.meetingTopBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--nm-space-4);
-    padding: var(--nm-space-2) var(--nm-space-2) var(--nm-space-4);
+
+    width: 100%;
+
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
-.meetingTopBar h1 {
-    margin-top: var(--nm-space-1);
+.meetingHeaderCluster {
+    width: 100%;
+    max-width: none;
+}
+
+.meetingTitleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-direction: row;   /* remove column */
+    gap: 16px;
+}
+
+.meetingTitleRow h1 {
     font-size: 20px;
     font-weight: 600;
     line-height: 28px;
@@ -138,10 +171,10 @@
 .liveBadge {
     display: inline-flex;
     align-items: center;
-    border: 1px solid rgba(34, 197, 94, 0.4);
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.12);
-    color: #bbf7d0;
+    border: 1px solid var(--nm-live-border);
+    border-radius: var(--nm-radius-pill);
+    background: var(--nm-live-bg);
+    color: var(--nm-live-text);
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
@@ -149,62 +182,100 @@
 }
 
 .roomMeta {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--nm-space-2);
-    color: rgba(255, 255, 255, 0.68);
-    font-size: 12px;
-    line-height: 16px;
+    flex-wrap: wrap;
 }
 
-.roomMeta span {
-    border: 1px solid rgba(216, 224, 236, 0.16);
-    border-radius: 999px;
+.metaChip {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border: 1px solid var(--nm-chip-border);
+    border-radius: var(--nm-radius-pill);
+    background: var(--nm-chip-bg);
     padding: 4px 10px;
+}
+
+.metaChipActive {
+    border-color: var(--nm-live-border) !important;
+    background: var(--nm-live-bg) !important;
+    color: #d1fae5;
 }
 
 .videoGrid {
     display: grid;
+    align-content: center;
+    justify-content: center;
+    justify-self: center;
+    width: 100%;
+    max-width: var(--meeting-content-width);
     min-height: 0;
-    gap: var(--nm-space-3);
-    transition: padding-right var(--nm-motion-page) var(--nm-ease);
+    gap: clamp(14px, 1.6vw, 20px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0;
+    transition:
+        padding-right var(--nm-motion-page) var(--nm-ease),
+        gap var(--nm-motion-component) var(--nm-ease);
 }
 
-.meetVideoContainer[data-chat-open="true"] .videoGrid {
+.meetVideoContainer[data-chat-open="true"] .meetingContent {
     padding-right: min(360px, 32vw);
 }
 
 .videoGrid1 {
-    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    justify-items: center;
 }
 
+.videoGridWaiting {
+    align-content: center;
+    row-gap: var(--nm-space-4);
+}
 .videoGrid2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    width: 100%;
 }
 
 .videoGrid3,
-.videoGrid4,
+.videoGrid4 {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    width: 100%;
+}
+
 .videoGridmany {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    width: 100%;
 }
 
 .videoTile {
     position: relative;
-    min-height: 220px;
+    min-height: clamp(220px, 34vh, 430px);
     overflow: hidden;
-    border: 1px solid rgba(216, 224, 236, 0.16);
+    border: 1px solid var(--nm-surface-border-strong);
     border-radius: var(--nm-radius-lg);
     background:
         linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.82)),
         #111827;
+    box-shadow: var(--nm-surface-shadow);
+    isolation: isolate;
+    aspect-ratio: 16 / 10;
+}
+
+.videoGrid1 .videoTile {
+    width: min(100%, 860px);
 }
 
 .activeTile {
-    border-color: rgba(34, 197, 94, 0.6);
+    border-color: rgba(165, 180, 252, 0.32);
+    box-shadow:
+        0 20px 48px rgba(0, 0, 0, 0.24),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .tileVideo {
+    display: block;
     width: 100%;
     height: 100%;
     min-height: inherit;
@@ -220,17 +291,192 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--nm-space-3);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(216, 224, 236, 0.13);
     border-radius: var(--nm-radius-md);
     background: rgba(9, 13, 25, 0.72);
+    backdrop-filter: blur(14px);
     color: rgba(255, 255, 255, 0.86);
     font-size: 12px;
     line-height: 16px;
     padding: var(--nm-space-2) var(--nm-space-3);
 }
 
-.tileOverlay span:first-child {
+.tileNameStrip {
+    display: grid;
+    min-width: 0;
+    gap: 1px;
+}
+
+.tileIdentity {
+    min-width: 0;
+    overflow: hidden;
+    color: #ffffff;
     font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tileNameStrip > span:last-child {
+    overflow: hidden;
+    color: var(--nm-text-muted-dark);
+    font-size: 11px;
+    line-height: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tileStatusRow {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.tileStatusRow span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid var(--nm-chip-border);
+    border-radius: var(--nm-radius-pill);
+    background: var(--nm-chip-bg);
+    color: var(--nm-chip-color);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 15px;
+    padding: 2px 7px;
+    white-space: nowrap;
+}
+
+.tileStatusRow span::before {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--nm-radius-pill);
+    background: currentColor;
+    content: "";
+    opacity: 0.72;
+}
+
+.tileStatusOn {
+    border-color: var(--nm-live-border) !important;
+    background: var(--nm-live-bg) !important;
+    color: var(--nm-live-text) !important;
+}
+
+.tileStatusOff {
+    border-color: rgba(239, 68, 68, 0.28) !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #fecaca !important;
+}
+
+.statusChip {
+    flex: 0 0 auto;
+    border: 1px solid var(--nm-chip-border);
+    border-radius: var(--nm-radius-pill);
+    background: var(--nm-chip-bg);
+    color: var(--nm-chip-color);
+    font-size: 11px;
+    line-height: 16px;
+    padding: 2px 8px;
+}
+
+.statusChipLive {
+    border-color: var(--nm-live-border);
+    background: var(--nm-live-bg);
+    color: var(--nm-live-text);
+}
+
+.presenceDot {
+    position: relative;
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border: 1px solid rgba(187, 247, 208, 0.46);
+    border-radius: var(--nm-radius-pill);
+    background: #22c55e;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+.waitingPanel {
+    justify-self: center;
+    display: grid;
+    width: min(100%, 860px);
+    max-width: 760px;
+    gap: var(--nm-space-3);
+    border: 1px solid var(--nm-surface-border-soft);
+    border-radius: var(--nm-radius-lg);
+    background:
+        var(--nm-surface-highlight),
+        rgba(255, 255, 255, 0.04);
+    color: var(--nm-text-soft-dark);
+    box-shadow: var(--nm-surface-shadow);
+    padding: var(--nm-space-5);
+    text-align: left;
+}
+
+.waitingPanel span {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+}
+
+.waitingPanel p {
+    max-width: 440px;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.roomCodeCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--nm-space-3);
+    border: 1px solid var(--nm-chip-border);
+    border-radius: var(--nm-radius-md);
+    background: rgba(255, 255, 255, 0.055);
+    padding: var(--nm-space-2);
+}
+
+.roomCodeCard span {
+    min-width: 0;
+    overflow: hidden;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.roomCodeCard button {
+    flex: 0 0 auto;
+    min-height: 34px;
+    border: 1px solid var(--nm-live-border);
+    border-radius: var(--nm-radius-md);
+    background: var(--nm-live-bg);
+    color: var(--nm-live-text);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 16px;
+    padding: 0 var(--nm-space-3);
+    transition:
+        background-color var(--nm-motion-component) var(--nm-ease),
+        border-color var(--nm-motion-component) var(--nm-ease),
+        box-shadow var(--nm-motion-component) var(--nm-ease);
+}
+
+.roomCodeCard button:hover,
+.roomCodeCard button:focus-visible {
+    border-color: rgba(34, 197, 94, 0.46);
+    background: rgba(34, 197, 94, 0.16);
+    outline: none;
+}
+
+.roomCodeCard button:focus-visible {
+    box-shadow: var(--nm-shadow-focus);
 }
 
 .chatRoom {
@@ -242,7 +488,7 @@
     width: min(344px, calc(100vw - 32px));
     border: 1px solid rgba(216, 224, 236, 0.2);
     border-radius: var(--nm-radius-lg);
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(248, 250, 252, 0.98);
     color: var(--nm-core-dark);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
 }
@@ -258,7 +504,7 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--nm-space-3);
-    border-bottom: 1px solid var(--nm-border);
+    border-bottom: 1px solid rgba(216, 224, 236, 0.84);
     padding: var(--nm-space-4);
 }
 
@@ -280,32 +526,64 @@
     gap: var(--nm-space-3);
     overflow-y: auto;
     padding: var(--nm-space-4);
+    scroll-padding-bottom: var(--nm-space-4);
 }
 
 .messageItem {
     display: grid;
-    gap: var(--nm-space-1);
+    justify-items: flex-start;
+    gap: 3px;
+    max-width: 86%;
 }
 
 .messageItem p {
-    color: var(--nm-core-dark);
-    font-size: 13px;
+    color: var(--nm-muted);
+    font-size: 12px;
     font-weight: 600;
-    line-height: 18px;
+    line-height: 16px;
 }
 
-.messageItem span,
+.messageItem span {
+    border: 1px solid rgba(216, 224, 236, 0.86);
+    border-radius: var(--nm-radius-md);
+    background: #ffffff;
+    color: var(--nm-core-dark);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    font-size: 14px;
+    line-height: 22px;
+    padding: var(--nm-space-2) var(--nm-space-3);
+}
+
+.messageItemOwn {
+    justify-self: flex-end;
+    justify-items: flex-end;
+}
+
+.messageItemOwn span {
+    border-color: rgba(37, 99, 235, 0.18);
+    background: #eff6ff;
+}
+
 .emptyChat {
+    display: grid;
+    min-height: 124px;
+    place-items: center;
+    border: 1px dashed rgba(148, 163, 184, 0.42);
+    border-radius: var(--nm-radius-md);
+    background: #f8fafc;
     color: var(--nm-ink-soft);
     font-size: 14px;
     line-height: 22px;
+    padding: var(--nm-space-4);
+    text-align: center;
 }
 
 .chattingArea {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: var(--nm-space-2);
-    border-top: 1px solid var(--nm-border);
+    border-top: 1px solid rgba(216, 224, 236, 0.84);
+    background: #ffffff;
     padding: var(--nm-space-4);
 }
 
@@ -324,21 +602,32 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    justify-self: center;
     gap: var(--nm-space-2);
-    padding: var(--nm-space-4) var(--nm-space-2) var(--nm-space-2);
+    width: fit-content;
+    max-width: var(--meeting-content-width);
+    margin-top: 0;
+    border: 1px solid var(--nm-control-border);
+    border-radius: var(--nm-radius-pill);
+    background: var(--nm-surface-dark);
+    box-shadow:
+        0 18px 46px rgba(0, 0, 0, 0.26),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    padding: var(--nm-space-2);
+    backdrop-filter: blur(18px);
 }
 
 .controlButton {
     position: relative;
     display: inline-flex;
     min-width: 76px;
-    min-height: 52px;
+    min-height: 48px;
     align-items: center;
     justify-content: center;
     gap: var(--nm-space-2);
-    border: 1px solid rgba(216, 224, 236, 0.18);
-    border-radius: var(--nm-radius-md);
-    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid transparent;
+    border-radius: var(--nm-radius-pill);
+    background: transparent;
     color: #ffffff;
     cursor: pointer;
     font-size: 12px;
@@ -347,14 +636,36 @@
     padding: 0 var(--nm-space-3);
     transition:
         background-color var(--nm-motion-component) var(--nm-ease),
-        border-color var(--nm-motion-component) var(--nm-ease);
+        border-color var(--nm-motion-component) var(--nm-ease),
+        color var(--nm-motion-component) var(--nm-ease),
+        transform var(--nm-motion-micro) var(--nm-ease);
 }
 
 .controlButton:hover,
 .controlButton:focus-visible {
-    border-color: rgba(165, 180, 252, 0.5);
-    background: rgba(255, 255, 255, 0.16);
+    border-color: var(--nm-control-border-hover);
+    background: var(--nm-control-bg-hover);
     outline: none;
+}
+
+.controlButton:focus-visible {
+    box-shadow:
+        var(--nm-shadow-focus),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.controlButton:active {
+    transform: translateY(1px);
+}
+
+.controlButton[aria-pressed="false"] {
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.controlButtonActive {
+    border-color: var(--nm-live-border);
+    background: var(--nm-live-bg);
+    color: var(--nm-live-text);
 }
 
 .controlButton svg {
@@ -369,7 +680,7 @@
     min-width: 18px;
     height: 18px;
     place-items: center;
-    border-radius: 999px;
+    border-radius: var(--nm-radius-pill);
     background: var(--nm-primary);
     color: #ffffff;
     font-size: 11px;
@@ -378,7 +689,7 @@
 
 .leaveButton {
     border-color: rgba(239, 68, 68, 0.36);
-    background: rgba(239, 68, 68, 0.14);
+    background: rgba(239, 68, 68, 0.16);
     color: #fecaca;
 }
 
@@ -390,7 +701,7 @@
 
 @media (min-width: 1300px) {
     .videoGridmany {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 }
 
@@ -399,7 +710,7 @@
         grid-template-columns: 1fr;
     }
 
-    .meetVideoContainer[data-chat-open="true"] .videoGrid {
+    .meetVideoContainer[data-chat-open="true"] .meetingContent {
         padding-right: 0;
     }
 
@@ -413,15 +724,27 @@
 
 @media (max-width: 720px) {
     .meetVideoContainer {
+        --meeting-section-gap: var(--nm-space-2);
         padding: var(--nm-space-3);
+    }
+
+    .meetingContent {
+        height: calc(100vh - 24px);
     }
 
     .meetingTopBar {
         align-items: flex-start;
         flex-direction: column;
+        
+    }
+
+    .meetingTitleRow,
+    .roomMeta {
+        justify-content: flex-start;
     }
 
     .videoGrid,
+    .videoGrid1,
     .videoGrid2,
     .videoGrid3,
     .videoGrid4,
@@ -436,6 +759,11 @@
     .controlButton {
         min-width: 64px;
         flex: 1 1 30%;
+    }
+
+    .buttonContainers {
+        width: 100%;
+        border-radius: 24px;
     }
 
     .tileOverlay {

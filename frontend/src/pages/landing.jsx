@@ -1,69 +1,130 @@
 import React from 'react'
-import "../App.css"
 import { Link, useNavigate } from 'react-router-dom'
-import { BrandMark, StatusBadge } from '../components/ui/Primitives'
+import { BrandMark } from '../components/ui/Primitives'
+import styles from '../styles/landingPage.module.css'
 
 export default function LandingPage() {
     const router = useNavigate();
 
     return (
-        <div className='landingPageContainer'>
-            <div className="nm-shell">
-                <nav className="topNav" aria-label="Primary navigation">
-                    <BrandMark />
-                    <div className='navlist'>
-                        <button className="navTextButton" onClick={() => router("/aljk23")}>Join as guest</button>
-                        <button className="navTextButton" onClick={() => router("/auth")}>Register</button>
-                        <button className="nm-button nm-button-secondary" onClick={() => router("/auth")}>Login</button>
+        <div className={styles.page}>
+            <div className={`nm-shell ${styles.shell}`}>
+                <nav className={styles.nav} aria-label="Primary navigation">
+                    <BrandMark className={styles.brand} />
+                    <div className={styles.navActions}>
+                        <button className={styles.navGuest} onClick={() => router("/aljk23")} type="button">Join as guest</button>
+                        <button className={styles.navRegister} onClick={() => router("/auth")} type="button">Register</button>
+                        <button className={`nm-button nm-button-primary ${styles.navLogin}`} onClick={() => router("/auth")} type="button">Login</button>
                     </div>
                 </nav>
 
-                <main className="landingMainContainer">
-                    <section className="landingCopy" aria-labelledby="landing-title">
-                        <span className="landingKicker">Calm video collaboration</span>
-                        <h1 id="landing-title">Meet with clarity, without the noise.</h1>
-                        <p>NexusMeet keeps the conversation central with precise controls, lightweight chat, and a meeting space that feels composed from the first click.</p>
-                        <div className="landingActions">
-                            <Link className="nm-button nm-button-primary" to={"/auth"}>Get started</Link>
-                            <button className="nm-button nm-button-secondary" onClick={() => router("/aljk23")}>Join as guest</button>
-                        </div>
-                    </section>
+                <main className={styles.main}>
+                    <section className={styles.hero} aria-labelledby="landing-title">
+                        <div className={styles.heroCopy}>
+                            <span className={styles.heroBadge}>Video rooms for everyday work</span>
+                            <h1 id="landing-title">Join the room, check your camera, get to the conversation.</h1>
+                            <p>
+                                NexusMeet gives teams a simple path into calls: enter with a room code, preview your setup, share your screen when needed, and return through meeting history.
+                            </p>
 
-                    <section className="landingVisual" aria-label="Meeting preview">
-                        <div className="meetingPreview">
-                            <div className="previewHeader">
-                                <StatusBadge tone="live">Live room</StatusBadge>
-                                <span className="nm-caption">4 participants</span>
+                            <div className={styles.heroActions}>
+                                <Link className={`nm-button nm-button-primary ${styles.primaryAction}`} to={"/auth"}>Login to start</Link>
+                                <button className={`nm-button nm-button-secondary ${styles.secondaryAction}`} onClick={() => router("/aljk23")} type="button">Join as guest</button>
                             </div>
-                            <div className="previewGrid">
-                                <div className="previewTile">
-                                    <span className="previewAvatar">SP</span>
-                                    <div className="previewMeta">
-                                        <span>Sujal</span>
-                                        <span>Speaking</span>
-                                    </div>
+                        </div>
+
+                        <section className={styles.previewPanel} aria-label="NexusMeet room preview">
+                            <div className={styles.previewTopBar}>
+                                <div>
+                                    <span className={styles.livePill}>Live room</span>
+                                    <h2>Weekly planning</h2>
                                 </div>
-                                <div className="previewTile previewTileSmall">
-                                    <span className="previewAvatar">AR</span>
-                                    <div className="previewMeta">
-                                        <span>Arya</span>
+                                <div className={styles.previewMeta}>
+                                    <span>4 participants</span>
+                                    <span>Guest joined</span>
+                                </div>
+                            </div>
+
+                            <div className={styles.roomGrid}>
+                                <article className={`${styles.roomTile} ${styles.roomTileLarge}`}>
+                                    <div className={styles.videoSurface}>
+                                        <span className={styles.avatar}>AM</span>
+                                    </div>
+                                    <div className={styles.tileOverlay}>
+                                        <span>Aisha Mehta</span>
+                                        <span className={styles.speakingDot}>Speaking</span>
+                                    </div>
+                                </article>
+
+                                <article className={styles.roomTile}>
+                                    <div className={styles.videoSurface}>
+                                        <span className={styles.avatar}>RK</span>
+                                    </div>
+                                    <div className={styles.tileOverlay}>
+                                        <span>Rahul Kapoor</span>
                                         <span>Muted</span>
                                     </div>
-                                </div>
-                                <div className="previewTile previewTileSmall">
-                                    <span className="previewAvatar">MK</span>
-                                    <div className="previewMeta">
-                                        <span>Mika</span>
-                                        <span>Stable</span>
+                                </article>
+
+                                <article className={styles.roomTile}>
+                                    <div className={styles.shareSurface}>
+                                        <span>Roadmap notes</span>
                                     </div>
-                                </div>
+                                    <div className={styles.tileOverlay}>
+                                        <span>Screen share</span>
+                                        <span>Shared</span>
+                                    </div>
+                                </article>
                             </div>
-                            <div className="previewDock" aria-hidden="true">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
+
+                            <div className={styles.controlDock} aria-hidden="true">
+                                <span>Mic</span>
+                                <span>Camera</span>
+                                <span>Share</span>
+                                <span>Chat</span>
                             </div>
+                        </section>
+                    </section>
+
+                    <section className={styles.workflow} aria-label="NexusMeet workflow">
+                        <ol>
+                            <li>Join room</li>
+                            <li>Check devices</li>
+                            <li>Meet</li>
+                            <li>Return later</li>
+                        </ol>
+                    </section>
+
+                    <section className={styles.highlights} aria-labelledby="landing-highlights">
+                        <div className={styles.highlightsHeader}>
+                            <span className={styles.sectionKicker}>What the room handles</span>
+                            <h2 id="landing-highlights">The pieces teams use before, during, and after a call.</h2>
+                        </div>
+
+                        <div className={styles.highlightGrid}>
+                            <article className={styles.highlightCard}>
+                                <span>01</span>
+                                <h3>Join by code</h3>
+                                <p>Use a shared room code or enter as a guest.</p>
+                            </article>
+
+                            <article className={styles.highlightCard}>
+                                <span>02</span>
+                                <h3>Saved history</h3>
+                                <p>Sign in to keep previous rooms within reach.</p>
+                            </article>
+
+                            <article className={styles.highlightCard}>
+                                <span>03</span>
+                                <h3>Lobby preview</h3>
+                                <p>Check your name and camera before joining.</p>
+                            </article>
+
+                            <article className={styles.highlightCard}>
+                                <span>04</span>
+                                <h3>Screen share</h3>
+                                <p>Share work without letting controls take over.</p>
+                            </article>
                         </div>
                     </section>
                 </main>

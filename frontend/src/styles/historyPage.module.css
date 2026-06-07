@@ -1,0 +1,266 @@
+.page {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 34%),
+        linear-gradient(135deg, rgba(14, 21, 38, 0.96), rgba(9, 13, 25, 0.99) 56%, rgba(11, 16, 32, 1)),
+        var(--nm-meeting-bg);
+    color: #ffffff;
+}
+
+.shell {
+    min-height: 100vh;
+    padding-bottom: var(--nm-space-12);
+}
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--nm-space-6);
+    padding: var(--nm-space-5) 0 var(--nm-space-6);
+}
+
+.headerCopy {
+    display: grid;
+    gap: var(--nm-space-2);
+    max-width: 640px;
+}
+
+.brand {
+    margin-bottom: var(--nm-space-4);
+    color: #ffffff;
+}
+
+.brand :global(.nm-brand-mark) {
+    border-color: rgba(216, 224, 236, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.kicker,
+.roomLabel {
+    color: var(--nm-live-text);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 16px;
+}
+
+.header h1 {
+    color: #ffffff;
+    font-size: var(--nm-page-title-dark);
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: 0;
+}
+
+.header p,
+.statePanel p,
+.activityDetails p {
+    color: var(--nm-text-soft-dark);
+    font-size: 15px;
+    line-height: 25px;
+}
+
+.homeButton,
+.primaryButton,
+.secondaryButton,
+.rejoinButton {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    gap: var(--nm-space-2);
+    border: 1px solid var(--nm-control-border);
+    border-radius: var(--nm-radius-md);
+    background: var(--nm-control-bg);
+    color: rgba(255, 255, 255, 0.88);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    padding: 0 var(--nm-space-4);
+    transition:
+        background-color var(--nm-motion-component) var(--nm-ease),
+        border-color var(--nm-motion-component) var(--nm-ease),
+        color var(--nm-motion-component) var(--nm-ease),
+        box-shadow var(--nm-motion-component) var(--nm-ease),
+        transform var(--nm-motion-micro) var(--nm-ease);
+}
+
+.homeButton:hover,
+.primaryButton:hover,
+.secondaryButton:hover,
+.rejoinButton:hover {
+    border-color: var(--nm-control-border-hover);
+    background: var(--nm-control-bg-hover);
+    color: #ffffff;
+}
+
+.homeButton:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.rejoinButton:focus-visible {
+    outline: none;
+    box-shadow: var(--nm-shadow-focus);
+}
+
+.homeButton:active,
+.primaryButton:active,
+.secondaryButton:active,
+.rejoinButton:active {
+    transform: translateY(1px);
+}
+
+.primaryButton,
+.rejoinButton {
+    border-color: var(--nm-live-border);
+    background: var(--nm-live-bg);
+    color: var(--nm-live-text);
+}
+
+.activityList {
+    display: grid;
+    gap: var(--nm-space-3);
+}
+
+.activityCard,
+.statePanel {
+    border: 1px solid var(--nm-surface-border-soft);
+    border-radius: var(--nm-radius-lg);
+    background:
+        var(--nm-surface-highlight),
+        var(--nm-surface-dark);
+    box-shadow: var(--nm-surface-shadow);
+}
+
+.activityCard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--nm-space-4);
+    padding: var(--nm-space-5);
+}
+
+.activityCard:hover {
+    border-color: rgba(34, 197, 94, 0.22);
+    background:
+        linear-gradient(180deg, rgba(34, 197, 94, 0.055), rgba(255, 255, 255, 0.035)),
+        rgba(10, 15, 29, 0.8);
+}
+
+.activityDetails {
+    display: grid;
+    gap: var(--nm-space-1);
+    min-width: 0;
+}
+
+.activityDetails h2 {
+    overflow: hidden;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 28px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rejoinButton {
+    min-width: 108px;
+}
+
+.statePanel {
+    display: grid;
+    justify-items: flex-start;
+    gap: var(--nm-space-3);
+    max-width: 680px;
+    border-color: rgba(34, 197, 94, 0.2);
+    background:
+        linear-gradient(180deg, rgba(34, 197, 94, 0.055), rgba(255, 255, 255, 0.035)),
+        var(--nm-surface-dark);
+    padding: var(--nm-space-6);
+}
+
+.statePanel h2 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 650;
+    line-height: 32px;
+}
+
+.skeletonCard {
+    pointer-events: none;
+}
+
+.skeletonLine,
+.skeletonMeta,
+.skeletonButton {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--nm-radius-pill);
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+}
+
+.skeletonLine {
+    width: min(260px, 52vw);
+    height: 22px;
+}
+
+.skeletonMeta {
+    width: 128px;
+    height: 14px;
+    margin-top: var(--nm-space-2);
+}
+
+.skeletonButton {
+    width: 104px;
+    height: 40px;
+}
+
+@media (max-width: 720px) {
+    .shell {
+        width: min(100% - 24px, 1180px);
+    }
+
+    .header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--nm-space-4);
+        padding: var(--nm-space-4) 0 var(--nm-space-5);
+    }
+
+    .brand {
+        margin-bottom: var(--nm-space-2);
+    }
+
+    .header h1 {
+        font-size: clamp(30px, 9vw, 38px);
+    }
+
+    .homeButton,
+    .primaryButton,
+    .secondaryButton,
+    .rejoinButton {
+        width: 100%;
+    }
+
+    .activityCard {
+        grid-template-columns: 1fr;
+        padding: var(--nm-space-4);
+    }
+
+    .activityDetails h2 {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .statePanel {
+        padding: var(--nm-space-4);
+    }
+
+    .skeletonButton {
+        width: 100%;
+    }
+}

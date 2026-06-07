@@ -1,110 +1,179 @@
 # NexusMeet
 
-![NexusMeet Cover](https://via.placeholder.com/1200x400/007FFF/FFFFFF?text=NexusMeet+-+Real-Time+Video+Conferencing)
+NexusMeet is a full-stack video meeting platform built with React, Node.js, Socket.IO, MongoDB, and native WebRTC. It is designed around fast room entry, a device-ready lobby, real-time peer-to-peer calls, meeting chat, screen sharing, and account-based meeting history.
 
-A modern, full-stack video conferencing web application featuring peer-to-peer WebRTC video rooms, real-time chat, and secure user authentication.
+The product experience has been refined into a calm, premium collaboration interface with a dark meeting-room system, clear status feedback, polished dashboards, and responsive layouts across desktop and mobile.
 
-## ✨ Features
+## Preview
 
-- **User Authentication:** Secure registration and login using JWT (JSON Web Tokens) and bcrypt password hashing.
-- **Instant Meetings:** Join or create meetings instantly via a shared room URL or unique meeting code.
-- **Real-Time Video & Audio:** Peer-to-peer streaming powered by WebRTC for low-latency communication.
-- **Media Controls:** Easily toggle microphone and camera on or off during a call.
-- **Screen Sharing:** Share your screen with other participants in real-time.
-- **In-Room Chat:** Integrated real-time text chat using Socket.IO.
-- **Meeting History:** Dashboard displaying past meetings for logged-in users.
+### Landing page
 
-## 🛠️ Tech Stack
+![NexusMeet landing page](frontend/screenshots/landing_page.png)
+
+### Authentication
+
+![NexusMeet authentication page](frontend/screenshots/AuthPage.png)
+
+## Highlights
+
+- Instant room entry with shareable meeting URLs and room codes.
+- Device-ready lobby with local camera preview before joining.
+- Peer-to-peer video and audio using the browser WebRTC API.
+- Reliable real-time signaling and chat through Socket.IO.
+- Screen sharing with restore-to-camera behavior after presenting.
+- Account login and registration with secure password hashing.
+- Meeting history for returning to previous rooms.
+- Polished responsive UI across landing, auth, dashboard, history, and meeting pages.
+
+## Product Experience
+
+NexusMeet focuses on keeping the meeting interface quiet and useful:
+
+- The meeting room centers participants first, with metadata kept compact.
+- Waiting states help solo users share the room code without clutter.
+- Participant tiles show clear identity and media status.
+- The control dock keeps mic, camera, share, chat, participants, and leave actions close at hand.
+- Dashboard and history pages support quick return flows for everyday use.
+
+## Tech Stack
 
 ### Frontend
-- **Framework:** React (Create React App)
-- **Styling & UI:** Material-UI (MUI), Custom CSS Modules
-- **Real-Time:** Socket.IO Client
-- **WebRTC:** Native Browser WebRTC API
+
+- React 18
+- React Router
+- CSS Modules
+- Material UI icons
+- Socket.IO Client
+- Native WebRTC APIs
 
 ### Backend
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Real-Time:** Socket.IO Server
-- **Database:** MongoDB (via Mongoose)
-- **Security:** bcrypt, crypto (Token Generation)
 
-## 📁 Project Structure
+- Node.js
+- Express
+- Socket.IO
+- MongoDB with Mongoose
+- bcrypt for password hashing
+- dotenv for environment configuration
 
-```
+## Project Structure
+
+```text
 .
-├── frontend/   # React client application
-└── backend/    # Express + Socket.IO server API
+├── backend/
+│   ├── src/
+│   │   ├── app.js
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   └── routes/
+│   └── package.json
+├── frontend/
+│   ├── screenshots/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── styles/
+│   │   └── environment.js
+│   └── package.json
+└── README.md
 ```
 
-## 🚀 Getting Started
-
-Follow these steps to set up the project locally on your machine.
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher recommended)
-- npm (comes with Node.js)
-- MongoDB (Local instance or MongoDB Atlas cluster)
+- Node.js 18 or newer
+- npm
+- MongoDB, either local or hosted with MongoDB Atlas
 
-### 1. Backend Setup
-
-Navigate to the backend directory, install dependencies, and configure environment variables.
+### Backend Setup
 
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` folder:
+Create `backend/.env`:
+
 ```env
-# backend/.env
 MONGO_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
 PORT=8000
 ```
 
-Start the backend development server:
+Start the backend:
+
 ```bash
 npm run dev
 ```
-*The backend server should now be running on `http://localhost:8000`.*
 
-### 2. Frontend Setup
+The backend runs on `http://localhost:8000` by default.
 
-In a new terminal window, navigate to the frontend directory and install dependencies.
+### Frontend Setup
 
 ```bash
 cd frontend
 npm install
 ```
 
-**Configure API Target:**
-The frontend points to the backend URL defined in `frontend/src/environment.js`. For local development, ensure `IS_PROD` is set to `false` to point to `http://localhost:8000`.
+For local development, confirm `frontend/src/environment.js` points to:
 
-Start the frontend development server:
+```js
+http://localhost:8000
+```
+
+Start the frontend:
+
 ```bash
 npm start
 ```
-*The React application will open automatically in your browser at `http://localhost:3000`.*
 
-## 🔌 API Endpoints & Socket Events
+The frontend runs on `http://localhost:3000`.
 
-### REST API (`/api/v1/users`)
-- `POST /login` - Authenticate and retrieve a session token.
-- `POST /register` - Create a new user account.
-- `POST /add_to_activity` - Record a new meeting in the user's history.
-- `GET /get_all_activity?token=...` - Fetch all past meetings for a user.
+## Available Scripts
 
-### Socket.IO Events
-- `join-call` - Triggered when a user enters a room URL.
-- `user-joined` / `user-left` - Broadcasted when participants enter or leave.
-- `signal` - Exchanges WebRTC SDP offers/answers and ICE candidates.
-- `chat-message` - Handles real-time text chat in the room.
+### Frontend
 
-## 🤝 Contributing
+```bash
+npm start
+npm run build
+npm test
+```
 
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+### Backend
 
-## 📝 License
+```bash
+npm run dev
+npm start
+```
 
-This project is open-source and available under the [ISC License](LICENSE).
+## API Overview
+
+User routes are available under `/api/v1/users`.
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `POST` | `/login` | Authenticate a user and return a token |
+| `POST` | `/register` | Create a new user account |
+| `POST` | `/add_to_activity` | Save a meeting to user history |
+| `GET` | `/get_all_activity?token=...` | Fetch meeting history |
+
+## Socket Events
+
+| Event | Purpose |
+| --- | --- |
+| `join-call` | Join a room and announce the participant |
+| `user-joined` | Notify room clients about participant membership |
+| `user-left` | Notify clients when a participant leaves |
+| `signal` | Exchange WebRTC SDP and ICE messages |
+| `chat-message` | Send and receive in-room chat messages |
+
+## Build Verification
+
+The frontend production build can be verified with:
+
+```bash
+cd frontend
+npm run build
+```
+
+## License
+
+This project is released under the ISC License.

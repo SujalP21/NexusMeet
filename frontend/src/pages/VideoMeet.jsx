@@ -50,6 +50,7 @@ export default function VideoMeetComponent() {
     const [askForUsername, setAskForUsername] = useState(true);
     const [username, setUsername] = useState("");
     const [videos, setVideos] = useState([])
+    const [roomCodeCopied, setRoomCodeCopied] = useState(false);
 
     const setLocalPreview = useCallback((stream) => {
         localStreamRef.current = stream;
@@ -678,6 +679,31 @@ export default function VideoMeetComponent() {
         setModal(false);
     }, [])
 
+    const roomCode = useMemo(() => {
+        const pathSegments = window.location.pathname.split("/").filter(Boolean);
+        return decodeURIComponent(pathSegments[pathSegments.length - 1] || "room");
+    }, [])
+
+    const copyRoomCode = useCallback(() => {
+        const markCopied = () => {
+            setRoomCodeCopied(true);
+            window.setTimeout(() => setRoomCodeCopied(false), 1800);
+        };
+
+        if (!navigator.clipboard?.writeText) {
+            markCopied();
+            return;
+        }
+
+        navigator.clipboard.writeText(roomCode)
+            .then(markCopied)
+            .catch((error) => {
+                if (process.env.NODE_ENV !== "production") {
+                    console.log(error);
+                }
+            });
+    }, [roomCode])
+
     const handleMessage = useCallback((e) => {
         setMessage(e.target.value);
     }, [])
@@ -697,6 +723,7 @@ export default function VideoMeetComponent() {
 
     const participantCount = videos.length + 1;
     const gridSize = participantCount > 4 ? "many" : `${participantCount}`;
+    const isWaitingForOthers = videos.length === 0;
     const participantLabel = useMemo(() => (
         `${participantCount} participant${participantCount === 1 ? "" : "s"}`
     ), [participantCount])
@@ -746,53 +773,124 @@ export default function VideoMeetComponent() {
                 </section> :
 
                 <section className={styles.meetVideoContainer} data-chat-open={showModal}>
-                    <div className={styles.meetingTopBar}>
-                        <div>
-                            <span className={styles.liveBadge}>Live</span>
-                            <h1>NexusMeet room</h1>
-                        </div>
-                        <div className={styles.roomMeta}>
-                            <span>{participantLabel}</span>
-                            <span>{screen ? "Screen sharing" : "Video room"}</span>
-                        </div>
-                    </div>
-
-                    <div className={`${styles.videoGrid} ${styles[`videoGrid${gridSize}`]}`}>
-                        <article className={`${styles.videoTile} ${styles.activeTile}`}>
-                            <video className={styles.tileVideo} ref={attachLocalVideoRef} autoPlay muted playsInline></video>
-                            <div className={styles.tileOverlay}>
-                                <span>{username || "You"}</span>
-                                <span>{audio === true ? "Mic on" : "Muted"} - {video === true ? "Camera on" : "Camera off"}</span>
+                    <div className={styles.meetingContent}>
+                        <div className={styles.meetingTopBar}>
+                            <div className={styles.meetingHeaderCluster}>
+                                <div className={styles.meetingTitleRow}>
+                                    <h1>NexusMeet Room</h1>
+                                    <div className={styles.roomMeta}>
+                                        <span className={styles.liveBadge}>Live</span>
+                                        <span className={styles.metaChip}>{participantLabel}</span>
+                                        <span className={styles.metaChip}>Room {roomCode}</span>
+                                        {screen ? <span className={`${styles.metaChip} ${styles.metaChipActive}`}>Presenting</span> : null}
+                                    </div>
+                                </div>
                             </div>
-                        </article>
+                        </div>
 
-                        {videos.map((video, index) => (
-                            <article className={styles.videoTile} key={video.socketId}>
-                                <video
-                                    className={styles.tileVideo}
-                                    data-socket={video.socketId}
-                                    ref={ref => {
-                                        if (ref && video.stream) {
-                                            ref.srcObject = video.stream;
-                                            if (process.env.NODE_ENV !== "production") {
-                                                console.debug("[NexusMeet VideoMeet] remote video srcObject assigned", {
-                                                    socketId: video.socketId,
-                                                    stream: video.stream,
-                                                    srcObject: ref.srcObject,
-                                                });
-                                            }
-                                        }
-                                    }}
-                                    autoPlay
-                                    playsInline
-                                >
-                                </video>
+                        <div className={`${styles.videoGrid} ${styles[`videoGrid${gridSize}`]} ${isWaitingForOthers ? styles.videoGridWaiting : ""}`}>
+                            <article className={`${styles.videoTile} ${styles.activeTile}`}>
+                                <video className={styles.tileVideo} ref={attachLocalVideoRef} autoPlay muted playsInline></video>
                                 <div className={styles.tileOverlay}>
-                                    <span>{video.name || `Participant ${index + 1}`}</span>
-                                    <span>Connected</span>
+                                    <div className={styles.tileNameStrip}>
+                                        <span className={styles.tileIdentity}>{username || "You"}</span>
+                                        <span>{screen ? "Presenting" : "You"}</span>
+                                    </div>
+                                    <div className={styles.tileStatusRow} aria-label="Your media status">
+                                        <span className={audio === true ? styles.tileStatusOn : styles.tileStatusOff}>{audio === true ? "Mic on" : "Mic muted"}</span>
+                                        <span className={video === true ? styles.tileStatusOn : styles.tileStatusOff}>{video === true ? "Camera on" : "Camera off"}</span>
+                                        {screen === true ? <span className={styles.tileStatusOn}>Presenting</span> : null}
+                                    </div>
                                 </div>
                             </article>
-                        ))}
+
+                            {isWaitingForOthers ? (
+                                <div className={styles.waitingPanel} aria-live="polite">
+                                    <span>Waiting for teammates</span>
+                                    <p>Share this room code with others to start collaborating. Participants will appear here as they join.</p>
+                                    <div className={styles.roomCodeCard}>
+                                        <span>{roomCode}</span>
+                                        <button type="button" onClick={copyRoomCode}>
+                                            {roomCodeCopied ? "Copied" : "Copy code"}
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            {videos.map((video, index) => {
+                                const remoteTracks = video.stream?.getTracks?.() || [];
+                                const remoteHasAudio = remoteTracks.some((track) => track.kind === "audio" && track.readyState === "live" && track.enabled !== false);
+                                const remoteHasVideo = remoteTracks.some((track) => track.kind === "video" && track.readyState === "live" && track.enabled !== false);
+
+                                return (
+                                    <article className={styles.videoTile} key={video.socketId}>
+                                        <video
+                                            className={styles.tileVideo}
+                                            data-socket={video.socketId}
+                                            ref={ref => {
+                                                if (ref && video.stream) {
+                                                    ref.srcObject = video.stream;
+                                                    if (process.env.NODE_ENV !== "production") {
+                                                        console.debug("[NexusMeet VideoMeet] remote video srcObject assigned", {
+                                                            socketId: video.socketId,
+                                                            stream: video.stream,
+                                                            srcObject: ref.srcObject,
+                                                        });
+                                                    }
+                                                }
+                                            }}
+                                            autoPlay
+                                            playsInline
+                                        >
+                                        </video>
+                                        <div className={styles.tileOverlay}>
+                                            <div className={styles.tileNameStrip}>
+                                                <span className={styles.tileIdentity}>{video.name || `Participant ${index + 1}`}</span>
+                                                <span>Remote participant</span>
+                                            </div>
+                                            <div className={styles.tileStatusRow} aria-label="Participant media status">
+                                                <span className={remoteHasAudio ? styles.tileStatusOn : styles.tileStatusOff}>{remoteHasAudio ? "Mic on" : "Mic muted"}</span>
+                                                <span className={remoteHasVideo ? styles.tileStatusOn : styles.tileStatusOff}>{remoteHasVideo ? "Camera on" : "Camera off"}</span>
+                                            </div>
+                                        </div>
+                                    </article>
+                                )
+                            })}
+                        </div>
+
+                        <div className={styles.buttonContainers} aria-label="Meeting controls">
+                                <button className={styles.controlButton} onClick={handleAudio} type="button" aria-pressed={audio === true} aria-label={audio === true ? "Mute microphone" : "Unmute microphone"}>
+                                    {audio === true ? <MicIcon /> : <MicOffIcon />}
+                                    <span>Mic</span>
+                                </button>
+
+                                <button className={styles.controlButton} onClick={handleVideo} type="button" aria-pressed={video === true} aria-label={video === true ? "Turn camera off" : "Turn camera on"}>
+                                    {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
+                                    <span>Camera</span>
+                                </button>
+
+                            {screenAvailable === true ?
+                                <button className={`${styles.controlButton} ${screen === true ? styles.controlButtonActive : ""}`} onClick={handleScreen} type="button" aria-pressed={screen === true} aria-label={screen === true ? "Stop screen sharing" : "Share screen"}>
+                                    {screen === true ? <StopScreenShareIcon /> : <ScreenShareIcon />}
+                                    <span>Share</span>
+                                </button> : null}
+
+                            <button className={styles.controlButton} onClick={openChat} type="button" aria-label="Open chat">
+                                <ChatIcon />
+                                <span>Chat</span>
+                                {newMessages > 0 ? <strong>{newMessages}</strong> : null}
+                            </button>
+
+                            <button className={styles.controlButton} type="button" aria-label="Participants">
+                                <GroupsIcon />
+                                <span>{participantCount}</span>
+                            </button>
+
+                            <button className={`${styles.controlButton} ${styles.leaveButton}`} onClick={handleEndCall} type="button" aria-label="Leave meeting">
+                                <CallEndIcon />
+                                <span>Leave</span>
+                            </button>
+                        </div>
                     </div>
 
                     {showModal ? <aside className={styles.chatRoom} aria-label="Meeting chat">
@@ -807,11 +905,11 @@ export default function VideoMeetComponent() {
 
                             <div className={styles.chattingDisplay}>
                                 {messages.length !== 0 ? messages.map((item, index) => (
-                                    <div className={styles.messageItem} key={index}>
+                                    <div className={`${styles.messageItem} ${item.sender === username ? styles.messageItemOwn : ""}`} key={index}>
                                         <p>{item.sender}</p>
                                         <span>{item.data}</span>
                                     </div>
-                                )) : <p className={styles.emptyChat}>No messages yet</p>}
+                                )) : <p className={styles.emptyChat}>No messages yet. Start with a short note when the room is ready.</p>}
                             </div>
 
                             <div className={styles.chattingArea}>
@@ -831,40 +929,6 @@ export default function VideoMeetComponent() {
                             </div>
                         </div>
                     </aside> : null}
-
-                    <div className={styles.buttonContainers} aria-label="Meeting controls">
-                        <button className={styles.controlButton} onClick={handleAudio} type="button" aria-label={audio === true ? "Mute microphone" : "Unmute microphone"}>
-                            {audio === true ? <MicIcon /> : <MicOffIcon />}
-                            <span>Mic</span>
-                        </button>
-
-                        <button className={styles.controlButton} onClick={handleVideo} type="button" aria-label={video === true ? "Turn camera off" : "Turn camera on"}>
-                            {(video === true) ? <VideocamIcon /> : <VideocamOffIcon />}
-                            <span>Camera</span>
-                        </button>
-
-                        {screenAvailable === true ?
-                            <button className={styles.controlButton} onClick={handleScreen} type="button" aria-label={screen === true ? "Stop screen sharing" : "Share screen"}>
-                                {screen === true ? <StopScreenShareIcon /> : <ScreenShareIcon />}
-                                <span>Share</span>
-                            </button> : null}
-
-                        <button className={styles.controlButton} onClick={openChat} type="button" aria-label="Open chat">
-                            <ChatIcon />
-                            <span>Chat</span>
-                            {newMessages > 0 ? <strong>{newMessages}</strong> : null}
-                        </button>
-
-                        <button className={styles.controlButton} type="button" aria-label="Participants">
-                            <GroupsIcon />
-                            <span>{participantCount}</span>
-                        </button>
-
-                        <button className={`${styles.controlButton} ${styles.leaveButton}`} onClick={handleEndCall} type="button" aria-label="Leave meeting">
-                            <CallEndIcon />
-                            <span>Leave</span>
-                        </button>
-                    </div>
                 </section>
             }
         </main>
