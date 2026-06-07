@@ -176,3 +176,4 @@ cypress/screenshots/
 *.swp
 *.swo
 *~
+*.code-workspace
