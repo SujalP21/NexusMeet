@@ -1,0 +1,178 @@
+# =========================
+# Dependencies
+# =========================
+node_modules/
+jspm_packages/
+bower_components/
+
+# =========================
+# Build Outputs
+# =========================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vercel/
+.netlify/
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Cache / Temp
+# =========================
+.cache/
+.temp/
+tmp/
+temp/
+.parcel-cache/
+.eslintcache
+
+# =========================
+# Coverage
+# =========================
+coverage/
+.nyc_output/
+
+# =========================
+# Runtime Data
+# =========================
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# =========================
+# Local Databases
+# =========================
+*.sqlite
+*.sqlite3
+*.db
+
+# =========================
+# MongoDB
+# =========================
+dump/
+mongodb-data/
+
+# =========================
+# Certificates / Secrets
+# =========================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# =========================
+# Docker
+# =========================
+.docker/
+docker-data/
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# =========================
+# AI Assistant Skill Configs
+# =========================
+.claude/
+.codex/
+.agent/
+.agents/
+.cursor/
+.continue/
+.codebuddy/
+.gemini/
+.github/
+.kiro/
+.opencodex/
+.opencode/
+.qoder/
+.roo/
+.trae/
+.windsurf/
+
+# =========================
+# Agent Skills Repository
+# =========================
+Agent-Skills-for-Context-Engineering/
+
+# =========================
+# AI Generated Artifacts
+# =========================
+.prompts/
+.ai/
+.llm/
+.memory/
+.context/
+.checkpoints/
+.conversations/
+.generations/
+.evals/
+.runs/
+
+# =========================
+# Local AI Cache
+# =========================
+.cache/openai/
+.cache/anthropic/
+.cache/gemini/
+.cache/codex/
+
+# =========================
+# Testing
+# =========================
+playwright-report/
+test-results/
+cypress/videos/
+cypress/screenshots/
+
+# =========================
+# Misc
+# =========================
+*.bak
+*.tmp
+*.swp
+*.swo
+*~

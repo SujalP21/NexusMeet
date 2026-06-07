@@ -1,0 +1,298 @@
+:root {
+  --nm-core-dark: #0b1020;
+  --nm-surface: #f7f9fc;
+  --nm-surface-raised: #ffffff;
+  --nm-primary: #2563eb;
+  --nm-primary-strong: #1d4ed8;
+  --nm-accent: #22c55e;
+  --nm-glow: #a5b4fc;
+  --nm-muted: #64748b;
+  --nm-border: #d8e0ec;
+  --nm-danger: #ef4444;
+  --nm-danger-strong: #dc2626;
+  --nm-ink: #111827;
+  --nm-ink-soft: #334155;
+  --nm-panel: #eef3f8;
+  --nm-meeting-bg: #090d19;
+
+  --nm-space-1: 4px;
+  --nm-space-2: 8px;
+  --nm-space-3: 12px;
+  --nm-space-4: 16px;
+  --nm-space-6: 24px;
+  --nm-space-8: 32px;
+  --nm-space-12: 48px;
+
+  --nm-radius-sm: 6px;
+  --nm-radius-md: 8px;
+  --nm-radius-lg: 12px;
+  --nm-shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.08);
+  --nm-shadow-focus: 0 0 0 4px rgba(165, 180, 252, 0.45);
+
+  --nm-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nm-motion-micro: 120ms;
+  --nm-motion-component: 180ms;
+  --nm-motion-page: 240ms;
+}
+
+html {
+  background: var(--nm-surface);
+}
+
+body {
+  background: var(--nm-surface);
+  color: var(--nm-ink);
+  font-family: Inter, Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.nm-page {
+  min-height: 100vh;
+  background: var(--nm-surface);
+  color: var(--nm-ink);
+}
+
+.nm-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.nm-page-title {
+  color: var(--nm-core-dark);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: 0;
+}
+
+.nm-section-title {
+  color: var(--nm-core-dark);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+.nm-body {
+  color: var(--nm-ink-soft);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.nm-label {
+  color: var(--nm-core-dark);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.nm-caption {
+  color: var(--nm-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.nm-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nm-space-3);
+  color: var(--nm-core-dark);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  text-decoration: none;
+}
+
+.nm-brand-mark {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: var(--nm-radius-md);
+  background: #ffffff;
+  color: var(--nm-primary);
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.12);
+}
+
+.nm-button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nm-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--nm-radius-md);
+  padding: 0 var(--nm-space-4);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  text-decoration: none;
+  transition:
+    background-color var(--nm-motion-component) var(--nm-ease),
+    border-color var(--nm-motion-component) var(--nm-ease),
+    color var(--nm-motion-component) var(--nm-ease),
+    box-shadow var(--nm-motion-component) var(--nm-ease);
+}
+
+.nm-button:focus-visible,
+.nm-icon-button:focus-visible,
+.nm-input:focus-visible,
+.nm-link:focus-visible {
+  outline: none;
+  box-shadow: var(--nm-shadow-focus);
+}
+
+.nm-button-primary {
+  background: var(--nm-primary);
+  color: #ffffff;
+}
+
+.nm-button-primary:hover {
+  background: var(--nm-primary-strong);
+}
+
+.nm-button-secondary {
+  border-color: var(--nm-border);
+  background: #ffffff;
+  color: var(--nm-core-dark);
+}
+
+.nm-button-secondary:hover {
+  border-color: #b9c7d8;
+  background: #f9fbfd;
+}
+
+.nm-button-danger {
+  background: var(--nm-danger);
+  color: #ffffff;
+}
+
+.nm-button-danger:hover {
+  background: var(--nm-danger-strong);
+}
+
+.nm-icon-button {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: #ffffff;
+  color: var(--nm-core-dark);
+  cursor: pointer;
+  transition:
+    background-color var(--nm-motion-component) var(--nm-ease),
+    border-color var(--nm-motion-component) var(--nm-ease),
+    color var(--nm-motion-component) var(--nm-ease),
+    box-shadow var(--nm-motion-component) var(--nm-ease);
+}
+
+.nm-icon-button:hover {
+  border-color: #b9c7d8;
+  background: #f9fbfd;
+}
+
+.nm-field {
+  display: grid;
+  gap: var(--nm-space-2);
+}
+
+.nm-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: #ffffff;
+  color: var(--nm-core-dark);
+  padding: 0 var(--nm-space-3);
+  transition:
+    border-color var(--nm-motion-component) var(--nm-ease),
+    box-shadow var(--nm-motion-component) var(--nm-ease);
+}
+
+.nm-input::placeholder {
+  color: #94a3b8;
+}
+
+.nm-input:focus {
+  border-color: var(--nm-primary);
+  outline: none;
+  box-shadow: var(--nm-shadow-focus);
+}
+
+.nm-surface {
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-surface-raised);
+}
+
+.nm-badge {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  gap: var(--nm-space-1);
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--nm-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  padding: 3px 9px;
+}
+
+.nm-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--nm-accent);
+}
+
+.nm-link {
+  color: var(--nm-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nm-link:hover {
+  color: var(--nm-primary-strong);
+}
+
+@media (max-width: 760px) {
+  .nm-shell {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .nm-page-title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
