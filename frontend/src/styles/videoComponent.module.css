@@ -717,8 +717,16 @@
     .chatRoom {
         top: auto;
         left: var(--nm-space-4);
+        right: var(--nm-space-4);
+        bottom: calc(var(--nm-space-4) + 80px);
         width: auto;
-        height: min(420px, 58vh);
+        height: min(420px, 62vh);
+        max-height: calc(100vh - 148px);
+    }
+
+    .roomCodeCard button,
+    .chatRoom .panelButton {
+        min-height: 44px;
     }
 }
 
@@ -735,12 +743,34 @@
     .meetingTopBar {
         align-items: flex-start;
         flex-direction: column;
-        
+        gap: var(--nm-space-2);
+        padding-right: 0;
+        padding-left: 0;
     }
 
-    .meetingTitleRow,
-    .roomMeta {
+    .meetingTitleRow {
+        width: 100%;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--nm-space-2);
         justify-content: flex-start;
+    }
+
+    .roomMeta {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--nm-space-2);
+        justify-content: flex-start;
+    }
+
+    .liveBadge,
+    .metaChip {
+        min-width: 0;
+        justify-content: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        text-align: center;
     }
 
     .videoGrid,
@@ -752,18 +782,82 @@
         grid-template-columns: 1fr;
     }
 
+    .videoGrid {
+        gap: var(--nm-space-2);
+    }
+
+    .videoGridWaiting {
+        row-gap: var(--nm-space-2);
+    }
+
     .videoTile {
-        min-height: 180px;
+        min-height: clamp(154px, 30vh, 220px);
+    }
+
+    .waitingPanel {
+        gap: var(--nm-space-2);
+        padding: var(--nm-space-3);
+    }
+
+    .waitingPanel p {
+        max-width: none;
+        line-height: 19px;
+    }
+
+    .roomCodeCard {
+        align-items: stretch;
+        flex-direction: column;
+        gap: var(--nm-space-2);
+    }
+
+    .roomCodeCard span {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .roomCodeCard button {
+        min-height: 44px;
+        width: 100%;
     }
 
     .controlButton {
-        min-width: 64px;
-        flex: 1 1 30%;
+        min-width: 0;
+        min-height: 48px;
+        flex: 1 1 calc(33.333% - var(--nm-space-2));
+        padding: 0 var(--nm-space-2);
     }
 
     .buttonContainers {
         width: 100%;
+        max-width: 100%;
         border-radius: 24px;
+    }
+
+    .meetVideoContainer[data-chat-open="true"] .videoGrid {
+        padding-bottom: 0;
+    }
+
+    .chatRoom {
+        right: var(--nm-space-3);
+        bottom: calc(var(--nm-space-3) + 84px);
+        left: var(--nm-space-3);
+        height: min(82vh, calc(100vh - 120px));
+        max-height: calc(100vh - 120px);
+        border-radius: var(--nm-radius-lg) var(--nm-radius-lg) var(--nm-radius-md) var(--nm-radius-md);
+    }
+
+    .chatHeader,
+    .chattingDisplay,
+    .chattingArea {
+        padding: var(--nm-space-3);
+    }
+
+    .chattingArea {
+        grid-template-columns: 1fr;
+    }
+
+    .sendButton {
+        min-height: 44px;
     }
 
     .tileOverlay {
